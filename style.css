@@ -1,0 +1,72 @@
+body {
+  background-color: rgb(17, 16, 16);
+  font-family: Arial;
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+#chat {
+  border: 1px solid #0e0d0d;
+  height: 400px;
+  overflow-y: scroll;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: rgb(202, 180, 180);
+  border-radius: 5%;
+  background-color: #444141;
+}
+
+.user {
+  text-align: right;
+  color: #66ccff;
+  margin: 5px 0;
+  padding: 8px 12px;
+  background-color: rgba(102, 204, 255, 0.1);
+  border-radius: 10px;
+  display: inline-block;
+  max-width: 80%;
+  float: right;
+  clear: both;
+}
+
+.ai {
+  text-align: left;
+  color: #90ee90;
+  margin: 5px 0;
+  padding: 8px 12px;
+  background-color: rgba(144, 238, 144, 0.1);
+  border-radius: 10px;
+  display: inline-block;
+  max-width: 80%;
+  float: left;
+  clear: both;
+}
+
+input {
+  width: 80%;
+  padding: 10px;
+  color: rgb(255, 255, 255);
+  border-radius: 5%;
+  background-color: rgb(39, 39, 39);
+  border: none;
+  outline: none;
+}
+
+button {
+  padding: 10px 20px;
+  border-radius: 10%;
+  background-color: rgb(36, 34, 34);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1a1818;
+}
+
+.ab {
+  text-align: center;
+  color: rgb(241, 234, 234);
+}
