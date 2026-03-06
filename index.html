@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -10,20 +10,205 @@
     <title>learnix</title>
   </head>
   <body>
-    <h1 class="ab">learnix</h1>
+    <div class="dots-bg"></div>
 
-    <div id="chat"></div>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo-group">
+          <h1 class="logo">learn<span>ix</span></h1>
+          <span class="logo-tagline">AI Tutor</span>
+        </div>
+        <div class="status-pill">
+          <div class="status-dot"></div>
+          Online
+        </div>
+      </div>
 
-    <input id="input" type="text" placeholder="Type message..." />
-    <button onclick="send()">Send</button>
+      <!-- Chat window -->
+      <div class="chat-window">
+        <div class="corner-accent"></div>
+
+        <!-- Top bar -->
+        <div class="chat-topbar">
+          <div class="chat-topbar-left">
+            <div class="ai-avatar">L</div>
+            <div class="ai-info">
+              <span class="ai-name">Learnix Assistant</span>
+              <span class="ai-sub">Powered by AI · Always learning</span>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <button class="topbar-btn" title="Clear chat" onclick="clearChat()">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </button>
+            <button class="topbar-btn" title="New chat" onclick="newChat()">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div id="chat">
+          <div class="welcome-state" id="welcome">
+            <div class="welcome-icon">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                />
+              </svg>
+            </div>
+            <div class="welcome-title">What would you like to learn?</div>
+            <div class="welcome-sub">
+              Ask me anything — science, history, math, languages, or any topic
+              you're curious about.
+            </div>
+            <div class="suggestion-chips">
+              <span class="chip" onclick="useChip(this)"
+                >✦ Explain quantum physics</span
+              >
+              <span class="chip" onclick="useChip(this)"
+                >✦ Help with calculus</span
+              >
+              <span class="chip" onclick="useChip(this)"
+                >✦ Learn Spanish basics</span
+              >
+              <span class="chip" onclick="useChip(this)"
+                >✦ World War II history</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Input area -->
+        <div class="input-area">
+          <div class="input-row">
+            <input
+              id="input"
+              type="text"
+              placeholder="Ask anything…"
+              autocomplete="off"
+            />
+            <div class="input-actions">
+              <button
+                class="send-btn"
+                onclick="send()"
+                id="sendBtn"
+                title="Send"
+              >
+                <svg
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 12h14M12 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="char-hint" id="charHint"></div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <span class="footer-link">Privacy</span>
+        <div class="footer-sep"></div>
+        <span class="footer-link">Terms</span>
+        <div class="footer-sep"></div>
+        <span>learnix © 2025</span>
+      </div>
+    </div>
+
     <script>
+      let messageCount = 0;
+
+      const input = document.getElementById("input");
+      const charHint = document.getElementById("charHint");
+
+      input.addEventListener("input", () => {
+        const len = input.value.length;
+        if (len > 200) {
+          charHint.textContent = `${len} characters`;
+          charHint.style.color = len > 400 ? "#c4593a" : "var(--ink-ghost)";
+        } else {
+          charHint.textContent = "";
+        }
+      });
+
+      input.addEventListener("keypress", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          send();
+        }
+      });
+
+      function getTime() {
+        return new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      }
+
+      function hideWelcome() {
+        const welcome = document.getElementById("welcome");
+        if (welcome) {
+          welcome.style.opacity = "0";
+          welcome.style.transition = "opacity 0.25s ease";
+          setTimeout(() => welcome.remove(), 250);
+        }
+      }
+
+      function useChip(el) {
+        const text = el.textContent.replace("✦ ", "").trim();
+        input.value = text;
+        input.focus();
+      }
+
       function send() {
-        const input = document.getElementById("input");
-        const msg = input.value;
+        const msg = input.value.trim();
         if (!msg) return;
 
+        hideWelcome();
         addMsg("user", msg);
         input.value = "";
+        charHint.textContent = "";
+
+        const typingId = showTyping();
 
         fetch("/send", {
           method: "POST",
@@ -32,29 +217,110 @@
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log("Received response:", data);
+            removeTyping(typingId);
             addMsg("ai", data.response);
           })
-          .catch((error) => {
-            console.error("Error:", error);
-            addMsg("ai", "Error: Could not connect to server");
+          .catch(() => {
+            removeTyping(typingId);
+            addMsg("ai", "Something went wrong. Please try again.");
           });
       }
 
       function addMsg(type, text) {
         const chat = document.getElementById("chat");
-        const div = document.createElement("div");
-        div.className = type;
-        div.textContent = text;
-        chat.appendChild(div);
-        chat.scrollTop = chat.scrollHeight;
+        messageCount++;
 
-        console.log(`Added ${type} message:`, text);
+        const row = document.createElement("div");
+        row.className = `msg-row ${type}`;
+
+        const avatar = document.createElement("div");
+        avatar.className = "msg-avatar";
+        avatar.textContent = type === "ai" ? "L" : "U";
+
+        const content = document.createElement("div");
+        content.className = "msg-content";
+
+        const bubble = document.createElement("div");
+        bubble.className = "msg-bubble";
+        bubble.textContent = text;
+
+        const time = document.createElement("div");
+        time.className = "msg-time";
+        time.textContent = getTime();
+
+        content.appendChild(bubble);
+        content.appendChild(time);
+        row.appendChild(avatar);
+        row.appendChild(content);
+        chat.appendChild(row);
+
+        chat.scrollTop = chat.scrollHeight;
       }
 
-      document.getElementById("input").addEventListener("keypress", (e) => {
-        if (e.key === "Enter") send();
-      });
+      function showTyping() {
+        const chat = document.getElementById("chat");
+        const id = "typing-" + Date.now();
+
+        const row = document.createElement("div");
+        row.className = "msg-row ai";
+        row.id = id;
+
+        const avatar = document.createElement("div");
+        avatar.className = "msg-avatar";
+        avatar.textContent = "L";
+
+        const content = document.createElement("div");
+        content.className = "msg-content";
+
+        const indicator = document.createElement("div");
+        indicator.className = "typing-indicator";
+        indicator.innerHTML =
+          '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+
+        content.appendChild(indicator);
+        row.appendChild(avatar);
+        row.appendChild(content);
+        chat.appendChild(row);
+        chat.scrollTop = chat.scrollHeight;
+
+        return id;
+      }
+
+      function removeTyping(id) {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+      }
+
+      function clearChat() {
+        const chat = document.getElementById("chat");
+        chat.innerHTML = "";
+        messageCount = 0;
+        const welcome = document.createElement("div");
+        welcome.className = "welcome-state";
+        welcome.id = "welcome";
+        welcome.innerHTML = `
+          <div class="welcome-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            </svg>
+          </div>
+          <div class="welcome-title">What would you like to learn?</div>
+          <div class="welcome-sub">Ask me anything — science, history, math, languages, or any topic you're curious about.</div>
+          <div class="suggestion-chips">
+            <span class="chip" onclick="useChip(this)">✦ Explain quantum physics</span>
+            <span class="chip" onclick="useChip(this)">✦ Help with calculus</span>
+            <span class="chip" onclick="useChip(this)">✦ Learn Spanish basics</span>
+            <span class="chip" onclick="useChip(this)">✦ World War II history</span>
+          </div>`;
+        chat.appendChild(welcome);
+      }
+
+      function newChat() {
+        clearChat();
+        input.focus();
+      }
     </script>
   </body>
 </html>
+
+
